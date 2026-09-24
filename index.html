@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,146 +11,219 @@
 
 <body>
 
-    <header>
-        <div class="logo">🌦️ WeatherArt Kids</div>
+<header class="topbar">
+    <div class="logo">
+        <span>🌈</span>
+        <div>
+            <strong>WeatherArt</strong>
+            <small>Kids Learning Studio</small>
+        </div>
+    </div>
 
-        <nav>
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-        </nav>
-    </header>
+    <div class="badge">✨ FREE PROJECT</div>
+</header>
 
 
-    <main id="home">
+<main>
 
-        <section class="hero">
+    <section class="hero">
 
-            <div class="content">
+        <div class="intro">
+            <span class="eyebrow">🧠 SMART WEATHER ILLUSTRATOR</span>
 
-                <div class="badge">
-                    🎨 AI Weather Learning
+            <h1>
+                Turn a weather
+                <span>forecast</span>
+                into a fun scene!
+            </h1>
+
+            <p>
+                Type a weather forecast and watch it transform
+                into a colorful animated illustration for kids.
+            </p>
+
+            <div class="feature-row">
+                <span>☀️ Sun</span>
+                <span>🌧️ Rain</span>
+                <span>❄️ Snow</span>
+                <span>💨 Wind</span>
+            </div>
+        </div>
+
+
+        <div class="app-card">
+
+            <div class="input-panel">
+
+                <div class="panel-title">
+                    <div>
+                        <small>STEP 01</small>
+                        <h2>Enter Forecast</h2>
+                    </div>
+
+                    <span class="sparkle">✨</span>
                 </div>
-
-                <h1>
-                    Turn Weather Into
-                    <span> a Fun Picture!</span>
-                </h1>
-
-                <p class="description">
-                    Enter a simple weather forecast and create
-                    a colorful, kid-friendly weather illustration.
-                </p>
-
-
-                <label for="weatherInput">
-                    🌤️ Enter your weather forecast
-                </label>
 
                 <textarea
                     id="weatherInput"
-                    placeholder="Example: Today is sunny with a few clouds."
+                    placeholder="Example: Today is a rainy day with dark clouds and cool wind..."
                 ></textarea>
 
-
-                <div class="buttons">
-
-                    <button id="generateBtn">
-                        ✨ Generate Illustration
-                    </button>
-
-                    <button id="sampleBtn" class="sample">
-                        📝 Try Sample
-                    </button>
-
-                </div>
-
-                <p id="status"></p>
-
-            </div>
-
-
-            <div class="preview-card">
-
-                <div id="illustration">
-
-                    <div class="big-icon">
-                        ☀️
-                    </div>
-
-                    <div class="clouds">
-                        ☁️ ☁️
-                    </div>
-
-                    <div class="land">
-                        🌳 🌼 🏡 🌼 🌳
-                    </div>
-
-                    <div class="preview-message">
-                        Your weather picture will appear here
-                    </div>
-
-                </div>
-
-
-                <button
-                    id="downloadBtn"
-                    class="download"
-                    disabled
-                >
-                    ⬇️ Download Illustration
+                <button id="sampleBtn" class="sample-btn">
+                    💡 Try Sample
                 </button>
 
-            </div>
 
-        </section>
+                <div class="complexity">
+                    <label>🎨 Illustration Detail</label>
 
+                    <div class="detail-buttons">
+                        <button class="detail active" data-detail="simple">
+                            Simple
+                        </button>
 
-        <section id="about" class="about">
+                        <button class="detail" data-detail="medium">
+                            Medium
+                        </button>
 
-            <h2>How It Works</h2>
-
-            <div class="steps">
-
-                <div class="step">
-                    <div class="number">1</div>
-                    <h3>📝 Type</h3>
-                    <p>
-                        Enter your weather forecast.
-                    </p>
+                        <button class="detail" data-detail="detailed">
+                            Detailed
+                        </button>
+                    </div>
                 </div>
 
 
-                <div class="step">
-                    <div class="number">2</div>
-                    <h3>🤖 Understand</h3>
-                    <p>
-                        AI identifies the weather condition.
-                    </p>
-                </div>
+                <button id="generateBtn" class="generate-btn">
+                    <span>✨</span>
+                    Generate Weather Scene
+                </button>
 
-
-                <div class="step">
-                    <div class="number">3</div>
-                    <h3>🎨 Illustrate</h3>
-                    <p>
-                        Create a fun weather illustration.
-                    </p>
-                </div>
+                <p id="status" class="status">
+                    Ready to create your scene!
+                </p>
 
             </div>
 
-        </section>
 
-    </main>
+            <div class="scene-panel">
+
+                <div class="scene-header">
+                    <div>
+                        <small>STEP 02</small>
+                        <h2>Your Weather Scene</h2>
+                    </div>
+
+                    <span id="weatherLabel" class="weather-label">
+                        🌈 Ready
+                    </span>
+                </div>
 
 
-    <footer>
-        <p>🌦️ WeatherArt Kids | GA-09 Generative AI Project</p>
-    </footer>
+                <div id="illustration" class="illustration">
+
+                    <div class="welcome-scene">
+
+                        <div class="welcome-sun">☀️</div>
+
+                        <div class="welcome-cloud cloud-one">☁️</div>
+                        <div class="welcome-cloud cloud-two">☁️</div>
+
+                        <div class="welcome-text">
+                            <strong>Let's create!</strong>
+                            <small>Your weather story will appear here.</small>
+                        </div>
+
+                        <div class="land">
+
+                            <div class="tree">🌳</div>
+
+                            <div class="house">
+                                🏠
+                            </div>
+
+                            <div class="flowers">
+                                🌷 🌼 🌷
+                            </div>
+
+                            <div class="tree">🌳</div>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
 
-    <script src="script.js"></script>
+                <div class="scene-footer">
+
+                    <div id="sceneDescription">
+                        🌈 Waiting for your forecast...
+                    </div>
+
+                    <button
+                        id="downloadBtn"
+                        class="download-btn"
+                        disabled
+                    >
+                        📥 Download Image
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="how-section">
+
+        <div class="section-heading">
+            <span>HOW IT WORKS</span>
+            <h2>Weather forecast → Illustration 🎨</h2>
+        </div>
+
+
+        <div class="steps">
+
+            <div class="step">
+                <div class="step-icon">📝</div>
+                <div>
+                    <h3>Write</h3>
+                    <p>Enter a simple weather forecast.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-icon">🧠</div>
+                <div>
+                    <h3>Understand</h3>
+                    <p>The system detects the weather condition.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-icon">🎨</div>
+                <div>
+                    <h3>Illustrate</h3>
+                    <p>A colorful animated weather scene appears.</p>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+    🌈 WeatherArt Kids · Fun Weather Learning
+</footer>
+
+
+<script src="script.js"></script>
 
 </body>
-
 </html>
