@@ -2,45 +2,91 @@ const weatherInput = document.getElementById("weatherInput");
 const generateBtn = document.getElementById("generateBtn");
 const sampleBtn = document.getElementById("sampleBtn");
 const downloadBtn = document.getElementById("downloadBtn");
+
 const illustration = document.getElementById("illustration");
 const status = document.getElementById("status");
+const weatherLabel = document.getElementById("weatherLabel");
+const sceneDescription = document.getElementById("sceneDescription");
+
+let selectedDetail = "simple";
+let currentWeather = "mixed";
 
 
-/* SAMPLE */
+/* =========================
+   SAMPLE BUTTON
+========================= */
 
 sampleBtn.addEventListener("click", () => {
 
     weatherInput.value =
-        "Today is a rainy day with dark clouds and cool wind.";
+        "Today is a rainy day with dark clouds, cool wind and light rain.";
 
     weatherInput.focus();
+});
+
+
+/* =========================
+   DETAIL BUTTONS
+========================= */
+
+document.querySelectorAll(".detail").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        document
+            .querySelectorAll(".detail")
+            .forEach(btn => btn.classList.remove("active"));
+
+        button.classList.add("active");
+
+        selectedDetail = button.dataset.detail;
+
+    });
 
 });
 
 
-/* WEATHER DETECTION */
+/* =========================
+   WEATHER DETECTION
+========================= */
 
 function detectWeather(text) {
 
     const words = text.toLowerCase();
 
     if (
+        words.includes("snow") ||
+        words.includes("snowy") ||
+        words.includes("snowfall") ||
+        words.includes("snowing") ||
+        words.includes("blizzard") ||
+        words.includes("freezing")
+    ) {
+        return "snow";
+    }
+
+
+    if (
         words.includes("rain") ||
         words.includes("rainy") ||
+        words.includes("raining") ||
         words.includes("drizzle") ||
-        words.includes("storm")
+        words.includes("storm") ||
+        words.includes("thunder")
     ) {
         return "rain";
     }
 
+
     if (
-        words.includes("snow") ||
-        words.includes("snowy") ||
-        words.includes("snowfall") ||
-        words.includes("cold")
+        words.includes("wind") ||
+        words.includes("windy") ||
+        words.includes("breeze") ||
+        words.includes("gust")
     ) {
-        return "snow";
+        return "wind";
     }
+
 
     if (
         words.includes("cloud") ||
@@ -50,255 +96,356 @@ function detectWeather(text) {
         return "cloud";
     }
 
-    if (
-        words.includes("wind") ||
-        words.includes("windy") ||
-        words.includes("breeze")
-    ) {
-        return "wind";
-    }
 
     if (
         words.includes("sun") ||
         words.includes("sunny") ||
+        words.includes("sunshine") ||
         words.includes("hot") ||
         words.includes("heat")
     ) {
         return "sun";
     }
 
+
     return "mixed";
 }
 
 
-/* GENERATE */
+/* =========================
+   GENERATE
+========================= */
 
-function generateIllustration() {
+generateBtn.addEventListener("click", generateScene);
+
+
+function generateScene() {
 
     const text = weatherInput.value.trim();
 
     if (!text) {
 
         status.textContent =
-            "⚠️ Please enter a weather forecast.";
+            "⚠️ Please enter a weather forecast first.";
+
+        weatherInput.focus();
 
         return;
     }
 
+
     generateBtn.disabled = true;
 
+    generateBtn.classList.add("loading");
+
     status.textContent =
-        "✨ Understanding the weather...";
+        "🧠 Understanding your forecast...";
+
 
     setTimeout(() => {
 
-        const weather = detectWeather(text);
+        currentWeather = detectWeather(text);
 
-        showWeather(weather, text);
-
-        status.textContent =
-            "✅ Your weather illustration is ready!";
+        createScene(currentWeather, text);
 
         generateBtn.disabled = false;
 
+        generateBtn.classList.remove("loading");
+
         downloadBtn.disabled = false;
 
-    }, 700);
+        status.textContent =
+            "✨ Weather scene generated!";
+
+    }, 900);
 }
 
 
-/* SHOW ILLUSTRATION */
+/* =========================
+   CREATE SCENE
+========================= */
 
-function showWeather(weather, text) {
+function createScene(weather, text) {
 
     let background;
-    let sky;
-    let mainIcon;
-    let ground;
-    let message;
+
+    let title;
+
+    let icon;
 
 
     if (weather === "sun") {
 
         background =
-            "linear-gradient(#7fd8ff 0%, #bdeaff 65%, #9ed66f 65%)";
+            "linear-gradient(#72cfff 0%, #d9f5ff 68%, #8dcc6e 68%)";
 
-        mainIcon = "☀️";
+        title = "☀️ Sunny Day";
 
-        sky = "☁️";
-
-        ground = "🌳 🌼 🏡 🌼 🌳";
-
-        message = "☀️ Sunny day!";
-
+        icon = "☀️";
     }
 
 
     else if (weather === "rain") {
 
         background =
-            "linear-gradient(#7895b5 0%, #9bb0c5 65%, #8fc56f 65%)";
+            "linear-gradient(#667f9c 0%, #a9bfd0 68%, #82b96b 68%)";
 
-        mainIcon = "🌧️";
+        title = "🌧️ Rainy Day";
 
-        sky = "☁️ ☁️ ☁️";
-
-        ground = "🌳 ☂️ 🏡 🌷 🌳";
-
-        message = "🌧️ Rainy day!";
-
+        icon = "🌧️";
     }
 
 
     else if (weather === "snow") {
 
         background =
-            "linear-gradient(#a9d9f5 0%, #d9efff 65%, #f3f9ff 65%)";
+            "linear-gradient(#a8d7f0 0%, #edf9ff 68%, #eaf4f8 68%)";
 
-        mainIcon = "❄️";
+        title = "🌨️ Snowy Day";
 
-        sky = "☁️ ❄️ ☁️";
-
-        ground = "🌲 ⛄ 🏠 🌲";
-
-        message = "❄️ Snowy day!";
-
+        icon = "❄️";
     }
 
 
     else if (weather === "cloud") {
 
         background =
-            "linear-gradient(#a9cee0 0%, #c7e1ec 65%, #9dce78 65%)";
+            "linear-gradient(#a6c7d8 0%, #dceaf0 68%, #91c575 68%)";
 
-        mainIcon = "☁️";
+        title = "☁️ Cloudy Day";
 
-        sky = "☁️ ☁️ ☁️";
-
-        ground = "🌳 🏡 🌼 🌳";
-
-        message = "☁️ Cloudy day!";
-
+        icon = "☁️";
     }
 
 
     else if (weather === "wind") {
 
         background =
-            "linear-gradient(#9bd9f5 0%, #d0efff 65%, #9ccd72 65%)";
+            "linear-gradient(#88d2f3 0%, #e2f8ff 68%, #91ca70 68%)";
 
-        mainIcon = "💨";
+        title = "💨 Windy Day";
 
-        sky = "☁️ ➡️ ☁️";
-
-        ground = "🌳 🍃 🏡 🍃 🌳";
-
-        message = "💨 Windy day!";
-
+        icon = "💨";
     }
 
 
     else {
 
         background =
-            "linear-gradient(#a9ddf7 0%, #d5f0ff 65%, #a8d87a 65%)";
+            "linear-gradient(#7fd6f5 0%, #e3f7ff 68%, #8bc96d 68%)";
 
-        mainIcon = "🌈";
+        title = "🌈 Mixed Weather";
 
-        sky = "☀️ ☁️";
-
-        ground = "🌳 🌈 🏡 🌷 🌳";
-
-        message = "🌈 Mixed weather!";
-
+        icon = "🌈";
     }
 
 
     illustration.style.background = background;
 
 
-    illustration.innerHTML = `
-
-        <div
-            class="big-icon"
-            style="
-                font-size: 85px;
-                animation: floatIcon 2s ease-in-out infinite;
-            "
-        >
-            ${mainIcon}
-        </div>
+    weatherLabel.textContent =
+        `${icon} ${title.replace(icon, "").trim()}`;
 
 
-        <div
-            class="clouds"
-            style="font-size: 45px;"
-        >
-            ${sky}
-        </div>
+    sceneDescription.textContent =
+        `${icon} ${title} · ${selectedDetail} illustration`;
 
 
-        <div
-            style="
-                position:absolute;
-                top:145px;
-                left:50%;
-                transform:translateX(-50%);
-                font-size:25px;
-                white-space:nowrap;
-            "
-        >
-            ${message}
-        </div>
+    let html = "";
 
 
-        <div
-            class="land"
-            style="font-size:42px;"
-        >
-            ${ground}
-        </div>
+    /* CLOUDS */
 
-
-        <div class="preview-message">
-
-            <strong>${message}</strong>
-
-            <br>
-
-            <small>
-                ${escapeHTML(text)}
-            </small>
-
-        </div>
-
+    html += `
+        <div class="weather-cloud cloud-a">☁️</div>
+        <div class="weather-cloud cloud-b">☁️</div>
     `;
+
+
+    /* SUN */
+
+    if (weather === "sun" || weather === "mixed") {
+
+        html += `
+            <div class="sun">☀️</div>
+        `;
+    }
+
+
+    /* RAIN */
+
+    if (weather === "rain") {
+
+        for (let i = 0; i < 70; i++) {
+
+            const left =
+                Math.random() * 100;
+
+            const delay =
+                Math.random() * 1.5;
+
+            html += `
+                <div
+                    class="rain-drop"
+                    style="
+                        left:${left}%;
+                        animation-delay:${delay}s;
+                    "
+                ></div>
+            `;
+        }
+    }
+
+
+    /* SNOW */
+
+    if (weather === "snow") {
+
+        for (let i = 0; i < 45; i++) {
+
+            const left =
+                Math.random() * 100;
+
+            const delay =
+                Math.random() * 4;
+
+            const size =
+                12 + Math.random() * 12;
+
+            html += `
+                <div
+                    class="snowflake"
+                    style="
+                        left:${left}%;
+                        animation-delay:${delay}s;
+                        font-size:${size}px;
+                    "
+                >❄</div>
+            `;
+        }
+    }
+
+
+    /* WIND */
+
+    if (weather === "wind") {
+
+        html += `
+            <div class="scene-message">
+                💨 Cool wind is blowing!
+            </div>
+        `;
+    }
+
+
+    /* MAIN MESSAGE */
+
+    if (weather !== "wind") {
+
+        html += `
+            <div class="scene-message">
+                ${icon} ${title}
+            </div>
+        `;
+    }
+
+
+    /* LANDSCAPE */
+
+    html += `
+        <div class="landscape">
+
+            <div class="tree">🌳</div>
+
+            <div class="flowers">
+                🌷 🌼
+            </div>
+
+            <div class="house">
+                🏠
+            </div>
+
+            <div class="flowers">
+                🌼 🌷
+            </div>
+
+            <div class="tree">🌳</div>
+
+        </div>
+    `;
+
+
+    illustration.innerHTML = html;
+
+
+    /* DETAIL MODE */
+
+    if (selectedDetail === "simple") {
+
+        document
+            .querySelectorAll(".flowers")
+            .forEach(item => {
+                item.style.display = "none";
+            });
+    }
+
+
+    if (selectedDetail === "detailed") {
+
+        addExtraFlowers();
+    }
 }
 
 
-/* PREVENT HTML FROM USER INPUT */
+/* =========================
+   EXTRA DETAILS
+========================= */
 
-function escapeHTML(text) {
+function addExtraFlowers() {
 
-    return text
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    for (let i = 0; i < 12; i++) {
+
+        const flower =
+            document.createElement("div");
+
+        flower.textContent =
+            Math.random() > .5
+                ? "🌼"
+                : "🌷";
+
+        flower.style.position =
+            "absolute";
+
+        flower.style.bottom =
+            `${Math.random() * 35 + 5}px`;
+
+        flower.style.left =
+            `${Math.random() * 100}%`;
+
+        flower.style.fontSize =
+            "18px";
+
+        illustration.appendChild(flower);
+    }
 }
 
 
-/* DOWNLOAD SVG */
+/* =========================
+   DOWNLOAD SVG IMAGE
+========================= */
 
 downloadBtn.addEventListener("click", () => {
 
-    const text = weatherInput.value.trim();
+    if (!weatherInput.value.trim()) {
+        return;
+    }
 
-    if (!text) return;
 
+    const text =
+        weatherInput.value.trim();
 
-    const weather = detectWeather(text);
+    const weather =
+        detectWeather(text);
 
 
     let icon = "🌈";
@@ -310,130 +457,150 @@ downloadBtn.addEventListener("click", () => {
     if (weather === "wind") icon = "💨";
 
 
-    const safeText = escapeHTML(text);
+    const safeText =
+        escapeXML(text);
 
 
     const svg = `
+<svg
+xmlns="http://www.w3.org/2000/svg"
+width="1200"
+height="800"
+viewBox="0 0 1200 800"
+>
 
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1200"
-            height="800"
-        >
+<defs>
 
-            <defs>
+<linearGradient
+id="sky"
+x1="0"
+y1="0"
+x2="0"
+y2="1"
+>
 
-                <linearGradient
-                    id="sky"
-                    x1="0"
-                    y1="0"
-                    x2="0"
-                    y2="1"
-                >
+<stop
+offset="0%"
+stop-color="#82d5f8"
+/>
 
-                    <stop
-                        offset="0%"
-                        stop-color="#8ed8ff"
-                    />
+<stop
+offset="68%"
+stop-color="#e4f8ff"
+/>
 
-                    <stop
-                        offset="65%"
-                        stop-color="#d5f0ff"
-                    />
+<stop
+offset="68%"
+stop-color="#8bc96d"
+/>
 
-                    <stop
-                        offset="65%"
-                        stop-color="#a8d87a"
-                    />
+</linearGradient>
 
-                </linearGradient>
-
-            </defs>
-
-
-            <rect
-                width="1200"
-                height="800"
-                fill="url(#sky)"
-            />
+</defs>
 
 
-            <text
-                x="600"
-                y="180"
-                text-anchor="middle"
-                font-size="120"
-            >
-                ${icon}
-            </text>
+<rect
+width="1200"
+height="800"
+fill="url(#sky)"
+/>
 
 
-            <text
-                x="600"
-                y="330"
-                text-anchor="middle"
-                font-size="42"
-                font-family="Arial"
-                font-weight="bold"
-                fill="#17324d"
-            >
-                WeatherArt Kids
-            </text>
+<text
+x="600"
+y="180"
+text-anchor="middle"
+font-size="120"
+>
+${icon}
+</text>
 
 
-            <text
-                x="600"
-                y="410"
-                text-anchor="middle"
-                font-size="30"
-                font-family="Arial"
-                fill="#17324d"
-            >
-                ${safeText}
-            </text>
+<text
+x="600"
+y="285"
+text-anchor="middle"
+font-family="Arial"
+font-size="45"
+font-weight="bold"
+fill="#17324d"
+>
+WeatherArt Kids
+</text>
 
 
-            <text
-                x="600"
-                y="650"
-                text-anchor="middle"
-                font-size="75"
-            >
-                🌳 🏡 🌼 🌳
-            </text>
+<text
+x="600"
+y="355"
+text-anchor="middle"
+font-family="Arial"
+font-size="32"
+font-weight="bold"
+fill="#17324d"
+>
+${escapeXML(getWeatherTitle(weather))}
+</text>
 
 
-            <text
-                x="600"
-                y="730"
-                text-anchor="middle"
-                font-size="25"
-                font-family="Arial"
-                fill="#17324d"
-            >
-                Fun Weather Learning
-            </text>
-
-        </svg>
-    `;
+<text
+x="600"
+y="430"
+text-anchor="middle"
+font-family="Arial"
+font-size="24"
+fill="#35556d"
+>
+${safeText}
+</text>
 
 
-    const blob = new Blob(
-        [svg],
-        {
-            type: "image/svg+xml"
-        }
-    );
+<text
+x="600"
+y="660"
+text-anchor="middle"
+font-size="80"
+>
+🌳 🏠 🌷 🌼 🌳
+</text>
 
 
-    const url = URL.createObjectURL(blob);
+<text
+x="600"
+y="730"
+text-anchor="middle"
+font-family="Arial"
+font-size="22"
+fill="#35556d"
+>
+Fun Weather Learning
+</text>
+
+</svg>
+`;
 
 
-    const link = document.createElement("a");
+    const blob =
+        new Blob(
+            [svg],
+            {
+                type: "image/svg+xml"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
 
     link.href = url;
 
-    link.download = "weather-illustration.svg";
+    link.download =
+        "weather-illustration.svg";
+
 
     document.body.appendChild(link);
 
@@ -441,7 +608,41 @@ downloadBtn.addEventListener("click", () => {
 
     document.body.removeChild(link);
 
-
     URL.revokeObjectURL(url);
-
 });
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function getWeatherTitle(weather) {
+
+    if (weather === "sun")
+        return "Sunny Day";
+
+    if (weather === "rain")
+        return "Rainy Day";
+
+    if (weather === "snow")
+        return "Snowy Day";
+
+    if (weather === "cloud")
+        return "Cloudy Day";
+
+    if (weather === "wind")
+        return "Windy Day";
+
+    return "Mixed Weather";
+}
+
+
+function escapeXML(text) {
+
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
+}
